@@ -151,33 +151,25 @@ export default function UploadDashboard() {
               )}
             </div>
 
-            {/* Result */}
-            <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-2">🧠 AI Prediction</h2>
-              {responseImage ? (
-                <>
-                  <img
-                    src={responseImage}
-                    alt="Processed"
-                    className="mx-auto max-h-60 rounded-xl border shadow-md"
-                  />
-                  <div className="mt-4 text-green-700 space-y-1">
-                    <p className="font-semibold">Detected: <span className="text-black">{label}</span></p>
-                    <p className="text-sm text-gray-600">Confidence: {confidence}%</p>
-                  </div>
+            {/* AI Result */}
+            {label && confidence && (
+              <div className="mt-4 bg-green-50 p-4 rounded-xl border text-left shadow-sm">
+                <h2 className="text-lg font-semibold text-green-700 mb-2">🧠 Prediction Result</h2>
+                <p className="text-gray-800"><span className="font-semibold">Label:</span> {label}</p>
+                <p className="text-gray-800"><span className="font-semibold">Confidence:</span> {confidence}%</p>
+
+                {responseImage && (
                   <a
                     href={responseImage}
-                    download="enhanced-image.jpg"
+                    download="detected-image.jpg"
                     className="mt-4 inline-flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-full hover:bg-green-700 transition text-sm font-medium"
                   >
                     <ArrowDownCircle className="w-5 h-5" />
-                    Download
+                    Download Annotated Image
                   </a>
-                </>
-              ) : (
-                <p className="text-gray-400 italic">Processed image will appear here</p>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
