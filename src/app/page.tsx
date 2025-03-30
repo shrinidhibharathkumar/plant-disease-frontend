@@ -152,24 +152,41 @@ export default function UploadDashboard() {
             </div>
 
             {/* AI Result */}
-            {label && confidence && (
-              <div className="mt-4 bg-green-50 p-4 rounded-xl border text-left shadow-sm">
-                <h2 className="text-lg font-semibold text-green-700 mb-2">🧠 Prediction Result</h2>
-                <p className="text-gray-800"><span className="font-semibold">Label:</span> {label}</p>
-                <p className="text-gray-800"><span className="font-semibold">Confidence:</span> {confidence}%</p>
+{label && confidence && (
+  <div className="mt-4 bg-green-50 p-6 rounded-xl border text-left shadow-md space-y-4">
+    <h2 className="text-lg font-semibold text-green-700">🧠 Prediction Result</h2>
+    <div className="text-gray-800 space-y-1">
+      <p><span className="font-semibold">Label:</span> {label}</p>
+      <p><span className="font-semibold">Confidence:</span> {confidence}%</p>
+    </div>
 
-                {responseImage && (
-                  <a
-                    href={responseImage}
-                    download="detected-image.jpg"
-                    className="mt-4 inline-flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-full hover:bg-green-700 transition text-sm font-medium"
-                  >
-                    <ArrowDownCircle className="w-5 h-5" />
-                    Download Annotated Image
-                  </a>
-                )}
-              </div>
-            )}
+    {/* Progress Bar */}
+    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+      <div
+        className="h-full rounded-full transition-all duration-500 ease-in-out"
+        style={{
+          width: `${confidence}%`,
+          background: `linear-gradient(to right, #22c55e, #16a34a)`,
+        }}
+      />
+    </div>
+
+    {/* Download Button */}
+    {responseImage && (
+      <div className="pt-2">
+        <a
+          href={responseImage}
+          download="detected-image.jpg"
+          className="inline-flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-full hover:bg-green-700 transition text-sm font-medium"
+        >
+          <ArrowDownCircle className="w-5 h-5" />
+          Download Annotated Image
+        </a>
+      </div>
+    )}
+  </div>
+)}
+
           </div>
         </div>
       </div>
