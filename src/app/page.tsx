@@ -13,6 +13,8 @@ export default function UploadDashboard() {
   const [imageUrl, setImageUrl] = useState('');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [responseImage, setResponseImage] = useState('');
+  const [label, setLabel] = useState('');
+  const [confidence, setConfidence] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -37,6 +39,8 @@ export default function UploadDashboard() {
   const handleSubmit = async () => {
     setLoading(true);
     setResponseImage('');
+    setLabel('');
+    setConfidence('');
 
     const formData = new FormData();
     if (imageFile) {
@@ -56,8 +60,11 @@ export default function UploadDashboard() {
       });
 
       if (!res.ok) throw new Error('Failed to process image');
-      const blob = await res.blob();
-      setResponseImage(URL.createObjectURL(blob));
+
+      const data = await res.json();
+      setResponseImage(`data:image/jpeg;base64,${data.image}`);
+      setLabel(data.label);
+      setConfidence(parseFloat(data.confidence).toFixed(2));
     } catch (err) {
       alert('Server error');
     } finally {
@@ -69,7 +76,7 @@ export default function UploadDashboard() {
     <main className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-5xl bg-white shadow-xl rounded-3xl p-10 border border-gray-200">
         <h1 className="text-3xl md:text-4xl font-bold text-center text-green-700 mb-10">
-          🌱 Plant Image Enhancer
+          🌿 Plant Disease Detection
         </h1>
 
         <div className="grid md:grid-cols-2 gap-10">
@@ -122,7 +129,7 @@ export default function UploadDashboard() {
               ) : (
                 <>
                   <ImageIcon className="w-5 h-5" />
-                  Enhance Image
+                  Detect Disease
                 </>
               )}
             </button>
@@ -130,6 +137,7 @@ export default function UploadDashboard() {
 
           {/* Result Section */}
           <div className="space-y-6 text-center">
+            {/* Preview */}
             <div>
               <h2 className="text-lg font-semibold text-gray-700 mb-2">📷 Preview</h2>
               {previewImage ? (
@@ -143,8 +151,9 @@ export default function UploadDashboard() {
               )}
             </div>
 
+            {/* Result */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-2">✨ Processed Result</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-2">🧠 AI Prediction</h2>
               {responseImage ? (
                 <>
                   <img
@@ -152,6 +161,10 @@ export default function UploadDashboard() {
                     alt="Processed"
                     className="mx-auto max-h-60 rounded-xl border shadow-md"
                   />
+                  <div className="mt-4 text-green-700 space-y-1">
+                    <p className="font-semibold">Detected: <span className="text-black">{label}</span></p>
+                    <p className="text-sm text-gray-600">Confidence: {confidence}%</p>
+                  </div>
                   <a
                     href={responseImage}
                     download="enhanced-image.jpg"

@@ -11,16 +11,21 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      return new Response(JSON.stringify({ error: 'Processing failed' }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'Processing failed' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    const blob = await response.blob();
-    return new Response(blob, {
-      headers: {
-        'Content-Type': 'image/jpeg',
-      },
+    const data = await response.json();
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
